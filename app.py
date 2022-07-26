@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request
 import pickle
 import numpy as np
+from sklearn.utils.validation import check_array
 
-model = pickle.load(open('finalH1Bvisamodelnaive.pkl', 'rb'))
+model = pickle.load(open('finalH1Bvisamodel.pkl', 'rb'))
 
 app = Flask(__name__)
 
@@ -26,7 +27,8 @@ def home():
     SUPPORT_H1B = request.form['SUPPORT_H1B']
     WILLFUL_VIOLATOR = request.form['WILLFUL_VIOLATOR']
     arr = np.array([[SECONDARY_ENTITY_1, AGENT_REPRESENTING_EMPLOYER, CONTINUED_EMPLOYMENT, CHANGE_PREVIOUS_EMPLOYMENT, NEW_CONCURRENT_EMPLOYMENT, CHANGE_EMPLOYER, AMENDED_PETITION, H1B_DEPENDENT, SUPPORT_H1B, WILLFUL_VIOLATOR]])
-    pred = model.predict(arr)
+    arr1 = check_array(arr)
+    pred = model.predict(arr1)
     return render_template('after.html', data=pred)
 
 if __name__ == "__main__":
